@@ -14,7 +14,7 @@ export default async function AdminProtectedLayout({ children }: { children: Rea
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
             <Settings size={14} className="text-white" />
           </div>
-          <span className="font-bold text-gray-800">Admin — Casa Yafer</span>
+          <span className="font-bold text-gray-800">Admin — Comunidad Yafer</span>
         </div>
         <div className="flex items-center gap-1">
           <Link

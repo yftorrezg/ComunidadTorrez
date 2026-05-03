@@ -11,12 +11,12 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'Casa Yafer — Habitaciones en Alquiler | Sucre, Bolivia',
+  title: 'Comunidad Yafer — Habitaciones en Alquiler | Sucre, Bolivia',
   description:
     'Habitaciones en alquiler en Calle Victorino Vega N° 108, Sucre. Cerca del Hospital Universitario, Univalle y Mercado Campesino. Agua, luz e internet incluidos.',
   openGraph: {
-    title: 'Casa Yafer — Habitaciones en Alquiler | Sucre',
-    description: 'Encuentra tu habitacion ideal en el centro de Sucre. Todo incluido.',
+    title: 'Comunidad Yafer — Habitaciones en Alquiler | Sucre',
+    description: 'Encuentra tu habitación ideal en el centro de Sucre. Todo incluido.',
     type: 'website',
   },
 }
@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WhatsAppButton variant="floating" />
         <footer className="bg-gradient-to-r from-violet-900 to-indigo-900 text-white py-10 mt-16">
           <div className="max-w-6xl mx-auto px-4 text-center">
-            <div className="text-xl font-bold text-white mb-1">Casa Yafer</div>
+            <div className="text-xl font-bold text-white mb-1">Comunidad Yafer</div>
             <p className="text-violet-300 text-sm">Calle Victorino Vega N° 108 — Zona Mercado Campesino, Sucre</p>
             <p className="text-violet-400 text-sm mt-1">WhatsApp: +591 73813699</p>
             <div className="mt-4 flex justify-center gap-4 text-xs text-violet-500">

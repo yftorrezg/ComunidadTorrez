@@ -45,9 +45,9 @@ export default async function HomePage() {
             </div>
 
             <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-5 animate-fadeInUp delay-100">
-              Tu habitacion
+              Tu habitación
               <br />
-              <span className="text-yellow-300">te espera</span> aqui
+              <span className="text-yellow-300">te espera</span> aquí
             </h1>
 
             <p className="text-white/80 text-lg md:text-xl mb-8 animate-fadeInUp delay-200">
@@ -59,7 +59,7 @@ export default async function HomePage() {
                 { icon: <Droplets size={15} />, label: 'Agua' },
                 { icon: <Zap size={15} />, label: 'Luz' },
                 { icon: <Wifi size={15} />, label: 'Internet (P1-P2)' },
-                { icon: <Shield size={15} />, label: 'Camaras 24h' },
+                { icon: <Shield size={15} />, label: 'Cámaras 24h' },
               ].map(({ icon, label }) => (
                 <span key={label} className="glass text-white text-sm font-medium px-4 py-2 rounded-full flex items-center gap-1.5">
                   {icon} {label}
@@ -68,7 +68,7 @@ export default async function HomePage() {
             </div>
 
             <div className="flex flex-wrap gap-3 animate-fadeInUp delay-400">
-              <WhatsAppButton mensaje="Hola! Vi la pagina web y me interesa alquilar una habitacion en Casa Yafer." />
+              <WhatsAppButton mensaje="Hola! Vi la página web y me interesa alquilar una habitación en Comunidad Yafer." />
               <Link
                 href="#plantas"
                 className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-3.5 rounded-2xl backdrop-blur-sm transition-all"
@@ -107,7 +107,7 @@ export default async function HomePage() {
       <section className="bg-slate-50 py-10">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-gray-400 uppercase tracking-widest mb-5">
-            <Clock size={15} /> Caminando desde Casa Yafer
+            <Clock size={15} /> Caminando desde Comunidad Yafer
           </div>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
@@ -134,7 +134,7 @@ export default async function HomePage() {
             {[
               { icon: <Star size={24} />, color: 'from-amber-400 to-orange-500', title: 'Todo incluido', desc: 'Agua, luz e internet (en pisos superiores). Sin sorpresas al final del mes.' },
               { icon: <Users size={24} />, color: 'from-violet-500 to-purple-600', title: 'Comunidad tranquila', desc: 'Normas de convivencia claras para un ambiente de respeto y descanso.' },
-              { icon: <Shield size={24} />, color: 'from-emerald-500 to-teal-600', title: 'Seguridad 24/7', desc: 'Camaras de videovigilancia en todos los accesos del edificio.' },
+              { icon: <Shield size={24} />, color: 'from-emerald-500 to-teal-600', title: 'Seguridad 24/7', desc: 'Cámaras de videovigilancia en todos los accesos del edificio.' },
             ].map(({ icon, color, title, desc }) => (
               <div key={title} className="group bg-slate-50 hover:bg-white rounded-3xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 card-hover">
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform shadow-md`}>
@@ -157,7 +157,7 @@ export default async function HomePage() {
             </h2>
             <p className="text-gray-500">
               {totalDisponibles > 0
-                ? `${totalDisponibles} habitacion${totalDisponibles !== 1 ? 'es' : ''} disponible${totalDisponibles !== 1 ? 's' : ''} ahora mismo`
+                ? `${totalDisponibles} habitación${totalDisponibles !== 1 ? 'es' : ''} disponible${totalDisponibles !== 1 ? 's' : ''} ahora mismo`
                 : 'Todas las plantas tienen habitaciones con servicios incluidos'}
             </p>
           </div>
@@ -246,10 +246,10 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="text-3xl font-extrabold text-gray-800 mb-3">Donde estamos</h2>
+              <h2 className="text-3xl font-extrabold text-gray-800 mb-3">Dónde estamos</h2>
               <p className="text-gray-500 mb-4 leading-relaxed">
                 Calle Victorino Vega N° 108, Zona Mercado Campesino, Sucre — Bolivia.
-                En el corazon de la ciudad, a pasos de todo lo que necesitas.
+                En el corazón de la ciudad, a pasos de todo lo que necesitas.
               </p>
               <a
                 href="https://maps.app.goo.gl/gTCKY8JevVEze4zU7"
@@ -263,7 +263,7 @@ export default async function HomePage() {
             <div className="rounded-3xl overflow-hidden shadow-xl">
               <Image
                 src="/fotos/rutacasa.png"
-                alt="Mapa de ubicacion Casa Yafer, Sucre"
+                alt="Mapa de ubicación Comunidad Yafer, Sucre"
                 width={800}
                 height={400}
                 className="w-full object-cover"
@@ -277,13 +277,13 @@ export default async function HomePage() {
       <section className="bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-800 py-16">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-            Reserva tu habitacion hoy
+            Reserva tu habitación hoy
           </h2>
           <p className="text-white/70 mb-8 text-lg">
             Respuesta inmediata por WhatsApp. Sin tramites complicados.
           </p>
           <WhatsAppButton
-            mensaje="Hola! Quiero reservar una habitacion en Casa Yafer. Podrian darme mas informacion?"
+            mensaje="Hola! Quiero reservar una habitación en Comunidad Yafer. ¿Podrían darme más información?"
             className="text-lg px-10 py-4 shadow-2xl"
           />
         </div>

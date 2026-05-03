@@ -1,12 +1,18 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Wifi, Zap, Droplets, BedDouble, Calendar, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Wifi, Zap, Droplets, BedDouble, Calendar, CheckCircle, CalendarClock } from 'lucide-react'
 import { getHabitacion, getPlanta } from '@/lib/db'
 import ImageGallery from '@/components/ImageGallery'
 import StatusBadge from '@/components/StatusBadge'
 import WhatsAppButton from '@/components/WhatsAppButton'
 
 export const revalidate = 60
+
+function formatFecha(iso: string) {
+  const [y, m, d] = iso.split('-')
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
+  return `${d} de ${meses[parseInt(m) - 1]} de ${y}`
+}
 
 export default async function HabitacionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -18,7 +24,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
 
   const planta = await getPlanta(habitacion.planta_id).catch(() => null)
 
-  const mensajeWA = `Hola! Vi la pagina web de Casa Yafer. Me interesa la Habitacion ${habitacion.numero} de ${planta?.nombre ?? 'la casa'}. Esta disponible?`
+  const mensajeWA = `Hola! Vi la página web de Comunidad Yafer. Me interesa la Habitación ${habitacion.numero} de ${planta?.nombre ?? 'la comunidad'}. ¿Está disponible?`
 
   const servicioItems = [
     { key: 'Agua', icon: <Droplets size={16} />, color: 'text-sky-500' },
@@ -28,6 +34,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
 
   const disponible = habitacion.estado === 'disponible'
   const reservado = habitacion.estado === 'reservado'
+  const precioFinal = habitacion.precio ?? planta?.precio_mensual
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -48,7 +55,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
               <div className="flex items-center gap-2 mb-1">
                 <BedDouble size={20} className="text-violet-500" />
                 <h1 className="text-2xl font-extrabold text-gray-800">
-                  Habitacion {habitacion.numero}
+                  Habitación {habitacion.numero}
                 </h1>
               </div>
               {planta && <p className="text-gray-400 text-sm">{planta.nombre}</p>}
@@ -57,12 +64,12 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
           </div>
 
           {/* Galeria */}
-          <ImageGallery fotos={habitacion.fotos} nombre={`Habitacion ${habitacion.numero}`} />
+          <ImageGallery fotos={habitacion.fotos} nombre={`Habitación ${habitacion.numero}`} />
 
           {/* Descripcion */}
           {habitacion.descripcion && (
             <div className="bg-white rounded-3xl p-6 shadow-sm">
-              <h2 className="font-bold text-gray-800 mb-3 text-lg">Descripcion</h2>
+              <h2 className="font-bold text-gray-800 mb-3 text-lg">Descripción</h2>
               <p className="text-gray-500 leading-relaxed">{habitacion.descripcion}</p>
             </div>
           )}
@@ -71,7 +78,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
           {planta && planta.areas.length > 0 && (
             <div className="bg-white rounded-3xl p-6 shadow-sm">
               <h2 className="font-bold text-gray-800 mb-4 text-lg">
-                Areas compartidas en {planta.nombre}
+                Áreas compartidas en {planta.nombre}
               </h2>
               <div className="flex flex-wrap gap-2">
                 {planta.areas.map(a => (
@@ -85,7 +92,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
                 href={`/planta/${planta.id}`}
                 className="inline-flex items-center gap-1 text-sm text-violet-500 hover:text-violet-700 mt-4 font-medium transition-colors"
               >
-                Ver fotos de areas comunes →
+                Ver fotos de áreas comunes →
               </Link>
             </div>
           )}
@@ -98,7 +105,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
             <div className="flex items-center gap-2 mb-2">
               <BedDouble size={20} className="text-violet-500" />
               <h1 className="text-xl font-extrabold text-gray-800">
-                Habitacion {habitacion.numero}
+                Habitación {habitacion.numero}
               </h1>
             </div>
             {planta && <p className="text-gray-400 text-sm mb-3">{planta.nombre}</p>}
@@ -106,24 +113,26 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
           </div>
 
           {/* Precio */}
-          {planta && (
+          {precioFinal && (
             <div className="bg-gradient-to-br from-violet-600 to-indigo-700 rounded-3xl p-6 text-white shadow-xl shadow-violet-200">
-              <div className="text-4xl font-extrabold mb-0.5">{planta.precio_mensual} Bs.</div>
+              <div className="text-4xl font-extrabold mb-0.5">{precioFinal} Bs.</div>
               <div className="text-violet-200 text-sm mb-4">por mes</div>
 
-              <div className="space-y-1.5 mb-5">
-                {planta.servicios.map(s => {
-                  const item = servicioItems.find(si => si.key === s)
-                  return (
-                    <div key={s} className="flex items-center gap-2 text-sm">
-                      <span className={item?.color ?? 'text-white'}>{item?.icon}</span>
-                      <span className="text-white/90">{s} incluido</span>
-                    </div>
-                  )
-                })}
-              </div>
+              {planta && (
+                <div className="space-y-1.5 mb-5">
+                  {planta.servicios.map(s => {
+                    const item = servicioItems.find(si => si.key === s)
+                    return (
+                      <div key={s} className="flex items-center gap-2 text-sm">
+                        <span className={item?.color ?? 'text-white'}>{item?.icon}</span>
+                        <span className="text-white/90">{s} incluido</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
 
-              {planta.precio_semestral && (
+              {planta && planta.precio_semestral && (
                 <div className="bg-white/10 rounded-2xl p-3 text-sm text-white/80 space-y-1">
                   {planta.precio_trimestral && (
                     <div className="flex justify-between">
@@ -148,6 +157,17 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
             </div>
           )}
 
+          {/* Disponible desde */}
+          {!disponible && habitacion.disponible_desde && (
+            <div className="bg-rose-50 border border-rose-100 rounded-3xl p-4 flex items-center gap-3">
+              <CalendarClock size={18} className="text-rose-400 flex-shrink-0" />
+              <div>
+                <p className="text-rose-700 font-semibold text-sm">Libre desde</p>
+                <p className="text-rose-500 text-sm">{formatFecha(habitacion.disponible_desde)}</p>
+              </div>
+            </div>
+          )}
+
           {/* CTA WhatsApp */}
           {(disponible || reservado) && (
             <div className="bg-white rounded-3xl p-6 shadow-sm text-center">
@@ -161,7 +181,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
 
           {!disponible && !reservado && (
             <div className="bg-rose-50 border border-rose-100 rounded-3xl p-6 text-center">
-              <p className="text-rose-600 font-semibold mb-1">Habitacion ocupada</p>
+              <p className="text-rose-600 font-semibold mb-1">Habitación ocupada</p>
               <p className="text-rose-400 text-sm mb-4">Consulta otras habitaciones disponibles</p>
               <Link href="/" className="text-violet-600 text-sm font-medium hover:underline flex items-center justify-center gap-1">
                 <Calendar size={14} /> Ver disponibilidad →

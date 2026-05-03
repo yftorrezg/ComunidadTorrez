@@ -23,7 +23,7 @@ export default function LoginPage() {
     if (res.ok) {
       window.location.href = '/admin'
     } else {
-      setError('Contrasena incorrecta')
+      setError('Contraseña incorrecta')
       setLoading(false)
     }
   }
@@ -36,14 +36,14 @@ export default function LoginPage() {
             <Lock size={28} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">Panel Admin</h1>
-          <p className="text-white/60 text-sm mt-1">Casa Yafer</p>
+          <p className="text-white/60 text-sm mt-1">Comunidad Yafer</p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Contrasena
+                Contraseña
               </label>
               <div className="relative">
                 <input

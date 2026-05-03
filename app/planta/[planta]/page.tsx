@@ -39,7 +39,7 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">{planta.nombre}</h1>
         <p className="text-gray-500 mt-1">
-          {disponibles} habitacion{disponibles !== 1 ? 'es' : ''} disponible
+          {disponibles} habitación{disponibles !== 1 ? 'es' : ''} disponible
           {disponibles !== 1 ? 's' : ''} de {planta.habitaciones.length}
         </p>
         <div className="flex flex-wrap gap-2 mt-3">
@@ -81,7 +81,7 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
       {/* Areas comunes */}
       {planta.areas.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-700 mb-6">Areas compartidas</h2>
+          <h2 className="text-xl font-semibold text-gray-700 mb-6">Áreas compartidas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {planta.areas.map((area) => (
               <div key={area.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">

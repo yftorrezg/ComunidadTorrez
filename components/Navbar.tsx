@@ -10,7 +10,7 @@ export default function Navbar() {
             <Home size={16} className="text-white" />
           </div>
           <span className="font-bold text-lg bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-            Casa Yafer
+            Comunidad Yafer
           </span>
         </Link>
 
@@ -29,7 +29,7 @@ export default function Navbar() {
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm text-gray-500 hover:text-violet-600 hover:bg-violet-50 transition-all font-medium"
           >
             <MapPin size={15} />
-            <span className="hidden sm:inline">Ubicacion</span>
+            <span className="hidden sm:inline">Ubicación</span>
           </a>
           <Link
             href="/admin"
@@ -39,7 +39,7 @@ export default function Navbar() {
             <span className="hidden sm:inline">Admin</span>
           </Link>
           <a
-            href="https://wa.me/59173813699?text=Hola!%20Vi%20la%20pagina%20web%20y%20me%20interesa%20alquilar%20una%20habitacion."
+            href="https://wa.me/59173813699?text=Hola!%20Vi%20la%20p%C3%A1gina%20web%20y%20me%20interesa%20alquilar%20una%20habitaci%C3%B3n%20en%20Comunidad%20Yafer."
             target="_blank"
             rel="noopener noreferrer"
             className="ml-1 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md shadow-green-200 hover:shadow-lg hover:scale-105 transition-all"

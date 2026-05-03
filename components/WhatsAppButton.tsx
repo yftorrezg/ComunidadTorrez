@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function WhatsAppButton({
-  mensaje = 'Hola! Vi la pagina web y me interesa alquilar una habitacion.',
+  mensaje = 'Hola! Vi la página web y me interesa alquilar una habitación en Comunidad Yafer.',
   className = '',
   variant = 'inline',
 }: Props) {

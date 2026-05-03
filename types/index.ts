@@ -23,6 +23,8 @@ export interface Habitacion {
   numero: number
   estado: Estado
   descripcion: string | null
+  precio: number | null
+  disponible_desde: string | null
   fotos: Foto[]
 }
 

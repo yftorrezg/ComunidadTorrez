@@ -39,14 +39,14 @@ export default async function AdminPlantaPage({ params }: { params: Promise<{ pl
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
         {planta.habitaciones.map(hab => (
-          <AdminHabitacionCard key={hab.id} habitacion={hab} plantaNombre={planta.nombre} />
+          <AdminHabitacionCard key={hab.id} habitacion={hab} plantaPrecio={planta.precio_mensual} plantaNombre={planta.nombre} />
         ))}
       </div>
 
       {planta.areas.length > 0 && (
         <>
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
-            Areas Comunes ({planta.areas.length})
+            Áreas Comunes ({planta.areas.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {planta.areas.map(area => (
