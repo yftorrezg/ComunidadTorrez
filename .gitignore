@@ -36,6 +36,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# fotos locales (las imagenes estan en Supabase Storage)
+/public/fotos/
+
+# claude internal
+AGENTS.md
+CLAUDE.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
