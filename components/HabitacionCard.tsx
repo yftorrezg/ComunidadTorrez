@@ -28,7 +28,7 @@ export default function HabitacionCard({ habitacion, precio, plantaId }: Props) 
   const nombreMostrado = habitacion.titulo ?? `Habitación ${habitacion.numero}`
 
   // Para cuartos ocupados siempre mostramos la imagen CuartoOcupado
-  const imagenSrc = ocupado ? '/fotos/CuartoOcupado.jpeg' : (habitacion.fotos[0]?.url ?? null)
+  const imagenSrc = ocupado ? '/CuartoOcupado.jpeg' : (habitacion.fotos[0]?.url ?? null)
   const mostrarImagen = imagenSrc && !imgError
 
   return (
