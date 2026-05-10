@@ -3,9 +3,10 @@ import { MapPin } from 'lucide-react'
 import WhatsAppButton from '@/components/WhatsAppButton'
 
 export const metadata = {
-  title: 'Normas de Convivencia — Comunidad Yafer',
-  description: 'Guía de convivencia y cuidado del hogar en Comunidad Yafer, Cochabamba.',
-}
+  title: "Normas de Convivencia — Comunidad Yafer",
+  description:
+    "Guía de convivencia y cuidado del hogar en Comunidad Yafer, Sucre.",
+};
 
 // ── Normas principales ────────────────────────────────────────────────────────
 const normasPrincipales = [
@@ -208,19 +209,22 @@ const seccionesEspecificas = [
 export default function NormasPage() {
   return (
     <div className="min-h-screen">
-
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="relative bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 overflow-hidden">
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-          backgroundSize: '28px 28px'
-        }} />
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "28px 28px",
+          }}
+        />
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-white/10 blur-3xl" />
 
         <div className="relative max-w-4xl mx-auto px-4 py-14 sm:py-20 text-center">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-5">
-            <MapPin size={14} /> Calle Victorino Vega N° 108 — Cochabamba
+            <MapPin size={14} /> Calle Victorino Vega N° 108 — Sucre
           </div>
           <div className="text-5xl sm:text-7xl mb-4">🏠</div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">
@@ -228,14 +232,23 @@ export default function NormasPage() {
             <span className="text-yellow-300">Comunidad Yafer</span>
           </h1>
           <p className="text-white/85 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-            Guía de Convivencia y Cuidado del Hogar.<br className="hidden sm:block" />
-            Para que todos disfrutemos de un ambiente <strong className="text-white">tranquilo, limpio y seguro</strong>.
+            Guía de Convivencia y Cuidado del Hogar.
+            <br className="hidden sm:block" />
+            Para que todos disfrutemos de un ambiente{" "}
+            <strong className="text-white">tranquilo, limpio y seguro</strong>.
           </p>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z" fill="#f8fafc"/>
+          <svg
+            viewBox="0 0 1440 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z"
+              fill="#f8fafc"
+            />
           </svg>
         </div>
       </section>
@@ -244,24 +257,39 @@ export default function NormasPage() {
       <section className="bg-slate-50 py-12 sm:py-16">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2">Normas de Convivencia</h2>
-            <p className="text-gray-500 text-sm sm:text-base">Las reglas que nos permiten vivir en armonía</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2">
+              Normas de Convivencia
+            </h2>
+            <p className="text-gray-500 text-sm sm:text-base">
+              Las reglas que nos permiten vivir en armonía
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {normasPrincipales.map((norma) => (
-              <div key={norma.titulo} className={`bg-white rounded-2xl border ${norma.border} shadow-sm overflow-hidden`}>
+              <div
+                key={norma.titulo}
+                className={`bg-white rounded-2xl border ${norma.border} shadow-sm overflow-hidden`}
+              >
                 {/* Header de la card */}
-                <div className={`bg-gradient-to-r ${norma.color} px-5 py-4 flex items-center gap-3`}>
+                <div
+                  className={`bg-gradient-to-r ${norma.color} px-5 py-4 flex items-center gap-3`}
+                >
                   <span className="text-2xl sm:text-3xl">{norma.emoji}</span>
-                  <h3 className="font-bold text-white text-base sm:text-lg leading-tight">{norma.titulo}</h3>
+                  <h3 className="font-bold text-white text-base sm:text-lg leading-tight">
+                    {norma.titulo}
+                  </h3>
                 </div>
                 {/* Bullets */}
                 <ul className="px-5 py-4 space-y-2.5">
                   {norma.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-sm text-gray-600 leading-relaxed">
-                      <span className={`mt-0.5 w-1.5 h-1.5 rounded-full ${norma.bg} border ${norma.border} flex-shrink-0 mt-1.5`}
-                        style={{ backgroundColor: 'currentColor' }}
+                    <li
+                      key={j}
+                      className="flex items-start gap-2.5 text-sm text-gray-600 leading-relaxed"
+                    >
+                      <span
+                        className={`mt-0.5 w-1.5 h-1.5 rounded-full ${norma.bg} border ${norma.border} flex-shrink-0 mt-1.5`}
+                        style={{ backgroundColor: "currentColor" }}
                       />
                       <span>{item}</span>
                     </li>
@@ -277,29 +305,46 @@ export default function NormasPage() {
       {seccionesEspecificas.map((sec, idx) => (
         <section
           key={sec.id}
-          className={`py-12 sm:py-16 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}
+          className={`py-12 sm:py-16 ${idx % 2 === 0 ? "bg-white" : "bg-slate-50"}`}
         >
           <div className="max-w-5xl mx-auto px-4">
             {/* Section header */}
             <div className="flex items-center gap-4 mb-8">
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center text-2xl sm:text-3xl shadow-lg flex-shrink-0`}>
+              <div
+                className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center text-2xl sm:text-3xl shadow-lg flex-shrink-0`}
+              >
                 {sec.emoji}
               </div>
               <div>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-gray-800 leading-tight">{sec.titulo}</h2>
-                <p className="text-gray-500 text-sm mt-0.5 leading-snug">{sec.subtitulo}</p>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-gray-800 leading-tight">
+                  {sec.titulo}
+                </h2>
+                <p className="text-gray-500 text-sm mt-0.5 leading-snug">
+                  {sec.subtitulo}
+                </p>
               </div>
             </div>
 
             {/* Reglas grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {sec.reglas.map((regla, j) => (
-                <div key={j} className={`${sec.bgLight} border ${sec.borderColor} rounded-2xl p-4 sm:p-5`}>
+                <div
+                  key={j}
+                  className={`${sec.bgLight} border ${sec.borderColor} rounded-2xl p-4 sm:p-5`}
+                >
                   <div className="flex items-start gap-3">
-                    <span className="text-xl sm:text-2xl flex-shrink-0 leading-none mt-0.5">{regla.emoji}</span>
+                    <span className="text-xl sm:text-2xl flex-shrink-0 leading-none mt-0.5">
+                      {regla.emoji}
+                    </span>
                     <div>
-                      <h4 className={`font-bold ${sec.textColor} text-sm mb-1.5 leading-tight`}>{regla.titulo}</h4>
-                      <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{regla.desc}</p>
+                      <h4
+                        className={`font-bold ${sec.textColor} text-sm mb-1.5 leading-tight`}
+                      >
+                        {regla.titulo}
+                      </h4>
+                      <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+                        {regla.desc}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -308,7 +353,9 @@ export default function NormasPage() {
 
             {/* Nota de la sección */}
             {sec.nota && (
-              <div className={`mt-5 border ${sec.borderColor} ${sec.bgLight} rounded-2xl px-5 py-4 flex items-start gap-3`}>
+              <div
+                className={`mt-5 border ${sec.borderColor} ${sec.bgLight} rounded-2xl px-5 py-4 flex items-start gap-3`}
+              >
                 <span className="text-xl flex-shrink-0">⚠️</span>
                 <p className={`text-sm ${sec.textColor} leading-relaxed`}>
                   <strong>Importante:</strong> {sec.nota}
@@ -327,12 +374,14 @@ export default function NormasPage() {
             ¡Gracias por cuidar tu hogar!
           </h2>
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-2">
-            Seguir estas normas nos ayuda a convivir en un lugar agradable para todos.
-            El incumplimiento constante podría dar lugar a la terminación del contrato de alquiler.
+            Seguir estas normas nos ayuda a convivir en un lugar agradable para
+            todos. El incumplimiento constante podría dar lugar a la terminación
+            del contrato de alquiler.
           </p>
           <p className="text-gray-500 text-sm leading-relaxed mb-8">
-            Los daños por mal uso deberán ser cubiertos económicamente por quien los ocasione.
-            Ante cualquier duda o inconveniente, no dudes en comunicarte con nosotros.
+            Los daños por mal uso deberán ser cubiertos económicamente por quien
+            los ocasione. Ante cualquier duda o inconveniente, no dudes en
+            comunicarte con nosotros.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
@@ -349,7 +398,6 @@ export default function NormasPage() {
           </div>
         </div>
       </section>
-
     </div>
-  )
+  );
 }
