@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
-import { Bath, ChefHat, Shirt, Sun, Home, Trash2, Upload, Loader2 } from 'lucide-react'
+import { Bath, ChefHat, Shirt, Sun, Home, Trash2, Upload, Loader2, Eye, EyeOff } from 'lucide-react'
 import type { AreaComun, AreaTipo } from '@/types'
 
 const AREA_ICONS: Record<AreaTipo, React.ReactNode> = {
@@ -18,8 +18,22 @@ const AREA_ICONS: Record<AreaTipo, React.ReactNode> = {
 
 export default function AdminAreaCard({ area }: { area: AreaComun }) {
   const [fotos, setFotos] = useState(area.fotos)
+  const [oculta, setOculta] = useState(area.oculta)
   const [uploading, setUploading] = useState(false)
+  const [savingVisibilidad, setSavingVisibilidad] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  async function toggleVisibilidad() {
+    setSavingVisibilidad(true)
+    const nuevo = !oculta
+    const res = await fetch(`/api/areas/${area.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oculta: nuevo }),
+    })
+    if (res.ok) setOculta(nuevo)
+    setSavingVisibilidad(false)
+  }
 
   async function subirFoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -50,10 +64,33 @@ export default function AdminAreaCard({ area }: { area: AreaComun }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-amber-500">{AREA_ICONS[area.tipo]}</span>
-        <span className="font-semibold text-gray-800">{area.nombre}</span>
+    <div className={`bg-white rounded-2xl border shadow-sm p-4 transition-all ${oculta ? 'border-gray-200 opacity-70' : 'border-gray-100'}`}>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className={oculta ? 'text-gray-300' : 'text-amber-500'}>{AREA_ICONS[area.tipo]}</span>
+          <span className={`font-semibold ${oculta ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{area.nombre}</span>
+          {oculta && (
+            <span className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-medium">Oculta al público</span>
+          )}
+        </div>
+        <button
+          onClick={toggleVisibilidad}
+          disabled={savingVisibilidad}
+          title={oculta ? 'Mostrar en la web pública' : 'Ocultar de la web pública'}
+          className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all disabled:opacity-50 ${
+            oculta
+              ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+              : 'bg-gray-100 text-gray-500 hover:bg-rose-100 hover:text-rose-600'
+          }`}
+        >
+          {savingVisibilidad ? (
+            <Loader2 size={13} className="animate-spin" />
+          ) : oculta ? (
+            <><Eye size={13} /> Mostrar</>
+          ) : (
+            <><EyeOff size={13} /> Ocultar</>
+          )}
+        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-2">

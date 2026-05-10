@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { id } = await params
   const body = await req.json()
 
-  const allowed = ['estado', 'descripcion', 'precio', 'disponible_desde', 'tiene_contrato', 'titulo']
+  const allowed = ['oculta']
   const updates: Record<string, unknown> = {}
   for (const key of allowed) {
     if (key in body) updates[key] = body[key]
@@ -19,14 +19,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: 'Nada que actualizar' }, { status: 400 })
   }
 
-  if (updates.estado) {
-    const validos = ['disponible', 'ocupado', 'reservado']
-    if (!validos.includes(updates.estado as string)) {
-      return NextResponse.json({ error: 'Estado invalido' }, { status: 400 })
-    }
-  }
-
-  const { error } = await supabaseAdmin.from('habitaciones').update(updates).eq('id', parseInt(id))
+  const { error } = await supabaseAdmin.from('areas_comunes').update(updates).eq('id', parseInt(id))
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   return NextResponse.json({ ok: true })

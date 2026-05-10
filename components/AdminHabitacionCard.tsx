@@ -3,7 +3,7 @@
 import { useState, useRef, useTransition } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { BedDouble, Trash2, Upload, Loader2, Pencil, Check, X, CalendarClock, Tag } from 'lucide-react'
+import { BedDouble, Trash2, Upload, Loader2, Pencil, Check, X, CalendarClock, Tag, FileText } from 'lucide-react'
 import StatusBadge from './StatusBadge'
 import type { Habitacion, Estado } from '@/types'
 
@@ -22,6 +22,11 @@ export default function AdminHabitacionCard({
   const [uploading, setUploading] = useState(false)
   const [isPending, startTransition] = useTransition()
 
+  // Titulo
+  const [editTitulo, setEditTitulo] = useState(false)
+  const [titulo, setTitulo] = useState(habitacion.titulo ?? '')
+  const [savingTitulo, setSavingTitulo] = useState(false)
+
   // Descripción
   const [editDesc, setEditDesc] = useState(false)
   const [desc, setDesc] = useState(habitacion.descripcion ?? '')
@@ -37,6 +42,10 @@ export default function AdminHabitacionCard({
   const [fecha, setFecha] = useState(habitacion.disponible_desde ?? '')
   const [savingFecha, setSavingFecha] = useState(false)
 
+  // Contrato
+  const [tieneContrato, setTieneContrato] = useState(habitacion.tiene_contrato)
+  const [savingContrato, setSavingContrato] = useState(false)
+
   const fileRef = useRef<HTMLInputElement>(null)
 
   async function patch(body: Record<string, unknown>) {
@@ -49,10 +58,24 @@ export default function AdminHabitacionCard({
 
   async function cambiarEstado(nuevoEstado: Estado) {
     setEstado(nuevoEstado)
-    // Al marcar disponible, limpiar fecha
     const body: Record<string, unknown> = { estado: nuevoEstado }
     if (nuevoEstado === 'disponible') { body.disponible_desde = null; setFecha('') }
     await patch(body)
+    startTransition(() => router.refresh())
+  }
+
+  async function toggleContrato() {
+    setSavingContrato(true)
+    const nuevo = !tieneContrato
+    await patch({ tiene_contrato: nuevo })
+    setTieneContrato(nuevo)
+    setSavingContrato(false)
+  }
+
+  async function guardarTitulo() {
+    setSavingTitulo(true)
+    await patch({ titulo: titulo.trim() || null })
+    setSavingTitulo(false); setEditTitulo(false)
     startTransition(() => router.refresh())
   }
 
@@ -92,30 +115,103 @@ export default function AdminHabitacionCard({
   }
 
   const precioMostrado = precio ? `${precio} Bs.` : `${plantaPrecio} Bs. (planta)`
+  const nombreMostrado = titulo || `Hab. ${habitacion.numero}`
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50 bg-gray-50/50">
-        <div className="flex items-center gap-2">
-          <BedDouble size={16} className="text-violet-400" />
-          <span className="font-bold text-gray-700">Hab. {habitacion.numero}</span>
-          <span className="text-gray-300 text-xs">— {plantaNombre}</span>
+        <div className="flex items-center gap-2 min-w-0">
+          <BedDouble size={16} className="text-violet-400 flex-shrink-0" />
+          <span className="font-bold text-gray-700 truncate">{nombreMostrado}</span>
+          <span className="text-gray-300 text-xs flex-shrink-0">— {plantaNombre}</span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 flex-shrink-0">
           {isPending && <Loader2 size={13} className="text-violet-400 animate-spin" />}
           <StatusBadge estado={estado} />
         </div>
       </div>
 
       <div className="p-4 space-y-4">
+
+        {/* Badge de contrato */}
+        <button
+          onClick={toggleContrato}
+          disabled={savingContrato}
+          className="w-full relative overflow-hidden rounded-xl py-2.5 px-4 flex items-center justify-between transition-all disabled:opacity-60"
+          style={tieneContrato ? {} : {}}
+        >
+          {tieneContrato ? (
+            <>
+              {/* Fondo animado gradiente verde */}
+              <span className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 animate-pulse opacity-90" />
+              <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-green-300 to-teal-500 opacity-60 blur-sm" />
+              <span className="relative flex items-center gap-2 text-white font-bold text-sm">
+                <FileText size={15} />
+                Contrato
+              </span>
+              <span className="relative text-white/80 text-xs font-medium">
+                {savingContrato ? <Loader2 size={12} className="animate-spin" /> : 'Clic para quitar'}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="absolute inset-0 bg-gradient-to-r from-rose-100 to-red-100" />
+              <span className="relative flex items-center gap-2 text-rose-600 font-bold text-sm">
+                <FileText size={15} />
+                Sin contrato
+              </span>
+              <span className="relative text-rose-400 text-xs font-medium">
+                {savingContrato ? <Loader2 size={12} className="animate-spin" /> : 'Clic para marcar'}
+              </span>
+            </>
+          )}
+        </button>
+
+        {/* Titulo personalizado */}
+        <div className="bg-violet-50 rounded-xl p-3">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-violet-700">
+              <BedDouble size={12} /> Título de la habitación
+            </div>
+            {!editTitulo ? (
+              <button onClick={() => setEditTitulo(true)} className="text-violet-400 hover:text-violet-700 p-1 rounded-lg hover:bg-violet-100 transition-colors">
+                <Pencil size={12} />
+              </button>
+            ) : (
+              <div className="flex gap-1">
+                <button onClick={guardarTitulo} disabled={savingTitulo} className="text-emerald-500 hover:text-emerald-700 p-1 rounded-lg hover:bg-emerald-50">
+                  {savingTitulo ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />}
+                </button>
+                <button onClick={() => { setEditTitulo(false); setTitulo(habitacion.titulo ?? '') }} className="text-rose-400 p-1 rounded-lg hover:bg-rose-50">
+                  <X size={12} />
+                </button>
+              </div>
+            )}
+          </div>
+          {editTitulo ? (
+            <input
+              type="text"
+              value={titulo}
+              onChange={e => setTitulo(e.target.value)}
+              placeholder={`Habitación ${habitacion.numero}`}
+              className="w-full border border-violet-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-violet-400 bg-white"
+              autoFocus
+            />
+          ) : (
+            <p className="text-sm font-bold text-violet-700">
+              {titulo || <span className="text-violet-300 italic font-normal">Habitación {habitacion.numero} (por defecto)</span>}
+            </p>
+          )}
+        </div>
+
         {/* Estado */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-1.5">
           {(['disponible', 'reservado', 'ocupado'] as Estado[]).map(e => (
             <button
               key={e}
               onClick={() => cambiarEstado(e)}
-              className={`py-1.5 rounded-xl text-xs font-bold transition-all capitalize ${
+              className={`py-1.5 px-1 rounded-xl text-[11px] sm:text-xs font-bold transition-all capitalize truncate ${
                 estado === e
                   ? e === 'disponible' ? 'bg-emerald-500 text-white'
                     : e === 'reservado' ? 'bg-amber-400 text-white'

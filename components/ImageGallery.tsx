@@ -32,7 +32,7 @@ export default function ImageGallery({ fotos, nombre }: { fotos: Foto[]; nombre:
             onClick={() => setLightbox(0)}
             className="relative aspect-video rounded-2xl overflow-hidden bg-slate-100 group w-full"
           >
-            <Image src={featured.url} alt={nombre} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="100vw" />
+            <Image src={featured.url} alt={nombre} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) calc(100vw - 32px), (max-width: 1280px) calc(100vw - 64px), 1152px" quality={85} />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
               <ZoomIn size={28} className="text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
             </div>
@@ -41,7 +41,7 @@ export default function ImageGallery({ fotos, nombre }: { fotos: Foto[]; nombre:
           <div className="grid grid-cols-2 gap-2">
             {fotos.map((f, i) => (
               <button key={f.id} onClick={() => setLightbox(i)} className="relative aspect-square rounded-2xl overflow-hidden bg-slate-100 group">
-                <Image src={f.url} alt={`${nombre} ${i+1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="50vw" />
+                <Image src={f.url} alt={`${nombre} ${i+1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) calc(50vw - 20px), 576px" quality={85} />
               </button>
             ))}
           </div>
@@ -52,13 +52,13 @@ export default function ImageGallery({ fotos, nombre }: { fotos: Foto[]; nombre:
               onClick={() => setLightbox(0)}
               className="col-span-2 row-span-2 relative rounded-2xl overflow-hidden bg-slate-100 group"
             >
-              <Image src={featured.url} alt={nombre} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="50vw" />
+              <Image src={featured.url} alt={nombre} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) calc(50vw - 20px), 576px" quality={85} />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
             </button>
             {/* Fotos secundarias */}
             {rest.map((f, i) => (
               <button key={f.id} onClick={() => setLightbox(i + 1)} className="relative rounded-2xl overflow-hidden bg-slate-100 group">
-                <Image src={f.url} alt={`${nombre} ${i+2}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="25vw" />
+                <Image src={f.url} alt={`${nombre} ${i+2}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) calc(25vw - 10px), 288px" quality={80} />
                 {/* Overlay "ver todas" en la última */}
                 {i === rest.length - 1 && fotos.length > 5 && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center">

@@ -13,6 +13,11 @@ export default async function AdminPlantaPage({ params }: { params: Promise<{ pl
   const planta = await getPlanta(plantaId).catch(() => null)
   if (!planta) notFound()
 
+  const ORDEN_ESTADO = { disponible: 0, reservado: 1, ocupado: 2 }
+  const habitacionesOrdenadas = [...planta.habitaciones].sort(
+    (a, b) => ORDEN_ESTADO[a.estado] - ORDEN_ESTADO[b.estado]
+  )
+
   return (
     <div>
       <Link
@@ -34,11 +39,12 @@ export default async function AdminPlantaPage({ params }: { params: Promise<{ pl
         <AdminPreciosCard planta={planta} />
       </div>
 
-      <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+      <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex flex-wrap items-center gap-1">
         Habitaciones ({planta.habitaciones.length})
+        <span className="normal-case font-normal text-gray-300 text-[11px]">· disponibles → reservadas → ocupadas</span>
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-        {planta.habitaciones.map(hab => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-10">
+        {habitacionesOrdenadas.map(hab => (
           <AdminHabitacionCard key={hab.id} habitacion={hab} plantaPrecio={planta.precio_mensual} plantaNombre={planta.nombre} />
         ))}
       </div>
@@ -48,7 +54,7 @@ export default async function AdminPlantaPage({ params }: { params: Promise<{ pl
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
             Áreas Comunes ({planta.areas.length})
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {planta.areas.map(area => (
               <AdminAreaCard key={area.id} area={area} />
             ))}

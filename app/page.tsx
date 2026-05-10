@@ -51,15 +51,15 @@ export default async function HomePage() {
             </h1>
 
             <p className="text-white/80 text-lg md:text-xl mb-8 animate-fadeInUp delay-200">
-              Habitaciones amuebladas con todo incluido. A pasos del Hospital Universitario y las principales facultades.
+              Habitaciones disponibles con gastos incluidos. A pasos del Hospital Universitario y las principales facultades.
             </p>
 
             <div className="flex flex-wrap gap-3 mb-8 animate-fadeInUp delay-300">
               {[
                 { icon: <Droplets size={15} />, label: 'Agua' },
                 { icon: <Zap size={15} />, label: 'Luz' },
-                { icon: <Wifi size={15} />, label: 'Internet (P1-P2)' },
-                { icon: <Shield size={15} />, label: 'Cámaras 24h' },
+                { icon: <Wifi size={15} />, label: 'Internet' },
+                { icon: <Shield size={15} />, label: 'Cámaras entrada' },
               ].map(({ icon, label }) => (
                 <span key={label} className="glass text-white text-sm font-medium px-4 py-2 rounded-full flex items-center gap-1.5">
                   {icon} {label}
@@ -132,9 +132,9 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: <Star size={24} />, color: 'from-amber-400 to-orange-500', title: 'Todo incluido', desc: 'Agua, luz e internet (en pisos superiores). Sin sorpresas al final del mes.' },
+              { icon: <Star size={24} />, color: 'from-amber-400 to-orange-500', title: 'Todo incluido', desc: 'Agua, luz e internet en todas las plantas.' },
               { icon: <Users size={24} />, color: 'from-violet-500 to-purple-600', title: 'Comunidad tranquila', desc: 'Normas de convivencia claras para un ambiente de respeto y descanso.' },
-              { icon: <Shield size={24} />, color: 'from-emerald-500 to-teal-600', title: 'Seguridad 24/7', desc: 'Cámaras de videovigilancia en todos los accesos del edificio.' },
+              { icon: <Shield size={24} />, color: 'from-emerald-500 to-teal-600', title: 'Seguridad 24/7', desc: 'Cámaras en la entrada. Próximamente en Planta Baja, Planta 1 y Planta 2.' },
             ].map(({ icon, color, title, desc }) => (
               <div key={title} className="group bg-slate-50 hover:bg-white rounded-3xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 card-hover">
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform shadow-md`}>
@@ -172,15 +172,11 @@ export default async function HomePage() {
               {plantas.map((planta) => {
                 const cfg = PLANTAS_CONFIG.find(c => c.id === planta.id)
                 const disponibles = planta.habitaciones.filter(h => h.estado === 'disponible').length
-                const habsDestacadas = planta.habitaciones
-                  .filter(h => h.estado === 'disponible' && h.fotos.length > 0)
-                  .slice(0, 3)
-                  .concat(
-                    planta.habitaciones
-                      .filter(h => h.estado !== 'disponible' || h.fotos.length === 0)
-                      .slice(0, Math.max(0, 3 - planta.habitaciones.filter(h => h.estado === 'disponible' && h.fotos.length > 0).length))
-                  )
-                  .slice(0, 3)
+                const ORDEN_ESTADO = { disponible: 0, reservado: 1, ocupado: 2 }
+                const habsOrdenadas = [...planta.habitaciones].sort(
+                  (a, b) => ORDEN_ESTADO[a.estado] - ORDEN_ESTADO[b.estado]
+                )
+                const habsDestacadas = habsOrdenadas.slice(0, 3)
 
                 return (
                   <div key={planta.id} className="bg-white rounded-3xl shadow-sm overflow-hidden">
@@ -250,6 +246,7 @@ export default async function HomePage() {
               <p className="text-gray-500 mb-4 leading-relaxed">
                 Calle Victorino Vega N° 108, Zona Mercado Campesino, Sucre — Bolivia.
                 En el corazón de la ciudad, a pasos de todo lo que necesitas.
+                Entre la Plazuela Bolivia Libre y la Segip San Juanillo.
               </p>
               <a
                 href="https://maps.app.goo.gl/gTCKY8JevVEze4zU7"
@@ -280,7 +277,7 @@ export default async function HomePage() {
             Reserva tu habitación hoy
           </h2>
           <p className="text-white/70 mb-8 text-lg">
-            Respuesta inmediata por WhatsApp. Sin tramites complicados.
+            Respuesta inmediata por WhatsApp. 
           </p>
           <WhatsAppButton
             mensaje="Hola! Quiero reservar una habitación en Comunidad Yafer. ¿Podrían darme más información?"

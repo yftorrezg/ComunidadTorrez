@@ -21,9 +21,13 @@ CREATE TABLE IF NOT EXISTS habitaciones (
   id SERIAL PRIMARY KEY,
   planta_id TEXT NOT NULL REFERENCES plantas(id) ON DELETE CASCADE,
   numero INTEGER NOT NULL,
+  titulo TEXT,
   estado TEXT NOT NULL DEFAULT 'disponible'
     CHECK (estado IN ('disponible', 'ocupado', 'reservado')),
   descripcion TEXT,
+  precio INTEGER,
+  disponible_desde DATE,
+  tiene_contrato BOOLEAN DEFAULT false,
   orden INTEGER DEFAULT 0
 );
 
@@ -43,6 +47,7 @@ CREATE TABLE IF NOT EXISTS areas_comunes (
   planta_id TEXT NOT NULL REFERENCES plantas(id) ON DELETE CASCADE,
   tipo TEXT NOT NULL CHECK (tipo IN ('bano','cocina','lavanderia','tendedero','terraza','patio','vista','general')),
   nombre TEXT NOT NULL,
+  oculta BOOLEAN DEFAULT false,
   orden INTEGER DEFAULT 0
 );
 
@@ -98,6 +103,27 @@ INSERT INTO plantas (id, nombre, precio_mensual, precio_trimestral, precio_semes
   ('planta1',    'Planta 1',     450, 1320, 2580, 5040, ARRAY['Agua','Luz','Internet'], 3),
   ('planta2',    'Planta 2',     450, 1320, 2580, 5040, ARRAY['Agua','Luz','Internet'], 4)
 ON CONFLICT DO NOTHING;
+
+-- ============================================================
+-- MIGRACIONES (ejecutar si la BD ya existe)
+-- ============================================================
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS titulo TEXT;
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS precio INTEGER;
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS disponible_desde DATE;
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS tiene_contrato BOOLEAN DEFAULT false;
+ALTER TABLE areas_comunes ADD COLUMN IF NOT EXISTS oculta BOOLEAN DEFAULT false;
+
+-- Planta 0, Hab 3 → Garaje (200 Bs. garaje / 400 Bs. como cuarto)
+UPDATE habitaciones
+SET titulo = 'Garaje', precio = 200, descripcion = 'Espacio disponible como garaje a 200 Bs./mes o como cuarto a 400 Bs./mes. Consultar disponibilidad.'
+WHERE planta_id = 'planta0' AND numero = 3;
+
+-- Internet ahora disponible en todas las plantas
+UPDATE plantas SET servicios = ARRAY['Agua','Luz','Internet'] WHERE id IN ('plantaBaja','planta0');
+
+-- ============================================================
+-- SEED: DATOS INICIALES
+-- ============================================================
 
 -- Habitaciones Planta Baja (10)
 INSERT INTO habitaciones (planta_id, numero, estado, orden) VALUES

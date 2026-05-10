@@ -27,6 +27,12 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
 
   const disponibles = planta.habitaciones.filter((h) => h.estado === 'disponible').length
 
+  const ORDEN_ESTADO = { disponible: 0, reservado: 1, ocupado: 2 }
+  const habitacionesOrdenadas = [...planta.habitaciones].sort(
+    (a, b) => ORDEN_ESTADO[a.estado] - ORDEN_ESTADO[b.estado]
+  )
+  const areasVisibles = planta.areas.filter((a) => !a.oculta)
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <Link
@@ -68,7 +74,7 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
       {/* Habitaciones */}
       <h2 className="text-xl font-semibold text-gray-700 mb-4">Habitaciones</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-        {planta.habitaciones.map((hab) => (
+        {habitacionesOrdenadas.map((hab) => (
           <HabitacionCard
             key={hab.id}
             habitacion={hab}
@@ -79,11 +85,11 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
       </div>
 
       {/* Areas comunes */}
-      {planta.areas.length > 0 && (
+      {areasVisibles.length > 0 && (
         <div>
           <h2 className="text-xl font-semibold text-gray-700 mb-6">Áreas compartidas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {planta.areas.map((area) => (
+            {areasVisibles.map((area) => (
               <div key={area.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-3 text-gray-700 font-medium">
                   <span className="text-amber-500">{AREA_ICONS[area.tipo]}</span>
