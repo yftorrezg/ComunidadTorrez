@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { MapPin, Clock, Wifi, Zap, Droplets, BedDouble, ChevronRight, Star, Shield, Users } from 'lucide-react'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import StatusBadge from '@/components/StatusBadge'
-import HabitacionCard from '@/components/HabitacionCard'
+import PlantaHabsGrid from '@/components/PlantaHabsGrid'
 import { getPlantas } from '@/lib/db'
 import type { Estado } from '@/types'
 
@@ -212,20 +212,15 @@ export default async function HomePage() {
 
                     {/* Cards de habitaciones destacadas */}
                     <div className="p-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                        {habsDestacadas.map(hab => (
-                          <HabitacionCard
-                            key={hab.id}
-                            habitacion={hab}
-                            precio={planta.precio_mensual}
-                            plantaId={planta.id}
-                          />
-                        ))}
-                      </div>
+                      <PlantaHabsGrid
+                        habitaciones={habsDestacadas}
+                        precio={planta.precio_mensual}
+                        plantaId={planta.id}
+                      />
 
                       <Link
                         href={`/planta/${planta.id}`}
-                        className={`inline-flex items-center gap-2 bg-gradient-to-r ${cfg?.gradient} text-white font-semibold px-5 py-2.5 rounded-xl text-sm hover:opacity-90 transition-all shadow-md hover:shadow-lg`}
+                        className={`mt-4 inline-flex items-center gap-2 bg-gradient-to-r ${cfg?.gradient} text-white font-semibold px-5 py-2.5 rounded-xl text-sm hover:opacity-90 transition-all shadow-md hover:shadow-lg`}
                       >
                         Ver las {planta.habitaciones.length} habitaciones
                         <ChevronRight size={16} />
