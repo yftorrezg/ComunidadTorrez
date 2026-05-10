@@ -259,7 +259,7 @@ export default async function HomePage() {
             </div>
             <div className="rounded-3xl overflow-hidden shadow-xl">
               <Image
-                src="/fotos/rutacasa.png"
+                src="/rutacasa.png"
                 alt="Mapa de ubicación Comunidad Yafer, Sucre"
                 width={800}
                 height={400}
