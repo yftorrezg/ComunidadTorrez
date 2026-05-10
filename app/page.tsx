@@ -132,16 +132,18 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: <Star size={24} />, color: 'from-amber-400 to-orange-500', title: 'Todo incluido', desc: 'Agua, luz e internet en todas las plantas.' },
-              { icon: <Users size={24} />, color: 'from-violet-500 to-purple-600', title: 'Comunidad tranquila', desc: 'Normas de convivencia claras para un ambiente de respeto y descanso.' },
-              { icon: <Shield size={24} />, color: 'from-emerald-500 to-teal-600', title: 'Seguridad 24/7', desc: 'Cámaras en la entrada. Próximamente en Planta Baja, Planta 1 y Planta 2.' },
+              { icon: <Star size={22} />, color: 'from-amber-400 to-orange-500', title: 'Todo incluido', desc: 'Agua, luz e internet en todas las plantas.' },
+              { icon: <Users size={22} />, color: 'from-violet-500 to-purple-600', title: 'Comunidad tranquila', desc: 'Normas de convivencia claras para un ambiente de respeto y descanso.' },
+              { icon: <Shield size={22} />, color: 'from-emerald-500 to-teal-600', title: 'Seguridad 24/7', desc: 'Cámaras en la entrada. Próximamente en Planta Baja, Planta 1 y Planta 2.' },
             ].map(({ icon, color, title, desc }) => (
-              <div key={title} className="group bg-slate-50 hover:bg-white rounded-3xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 card-hover">
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform shadow-md`}>
+              <div key={title} className="group bg-slate-50 hover:bg-white rounded-3xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 card-hover flex items-start gap-4">
+                <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform shadow-md mt-0.5`}>
                   {icon}
                 </div>
-                <h3 className="font-bold text-gray-800 mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                <div>
+                  <h3 className="font-bold text-gray-800 mb-1">{title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                </div>
               </div>
             ))}
           </div>

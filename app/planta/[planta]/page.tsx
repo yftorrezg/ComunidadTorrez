@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Bath, ChefHat, Shirt, Sun, Home } from 'lucide-react'
 import { getPlanta } from '@/lib/db'
-import HabitacionCard from '@/components/HabitacionCard'
+import HabitacionesGrid from '@/components/HabitacionesGrid'
 import ImageGallery from '@/components/ImageGallery'
 import type { AreaTipo } from '@/types'
 
@@ -72,17 +72,11 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
       </div>
 
       {/* Habitaciones */}
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Habitaciones</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-        {habitacionesOrdenadas.map((hab) => (
-          <HabitacionCard
-            key={hab.id}
-            habitacion={hab}
-            precio={planta.precio_mensual}
-            plantaId={planta.id}
-          />
-        ))}
-      </div>
+      <HabitacionesGrid
+        habitaciones={habitacionesOrdenadas}
+        precio={planta.precio_mensual}
+        plantaId={planta.id}
+      />
 
       {/* Areas comunes */}
       {areasVisibles.length > 0 && (

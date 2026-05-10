@@ -11,6 +11,7 @@ interface Props {
   habitacion: Habitacion
   precio: number
   plantaId: string
+  compact?: boolean
 }
 
 function formatFecha(iso: string) {
@@ -19,7 +20,7 @@ function formatFecha(iso: string) {
   return `${d} de ${meses[parseInt(m) - 1]} de ${y}`
 }
 
-export default function HabitacionCard({ habitacion, precio, plantaId }: Props) {
+export default function HabitacionCard({ habitacion, precio, plantaId, compact = false }: Props) {
   const [imgError, setImgError] = useState(false)
 
   const ocupado = habitacion.estado === 'ocupado'
@@ -39,7 +40,7 @@ export default function HabitacionCard({ habitacion, precio, plantaId }: Props) 
       } ${ocupado ? 'opacity-75' : ''}`}
     >
       {/* Imagen */}
-      <div className="relative aspect-[4/3] min-h-[180px] bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
+      <div className={`relative aspect-[4/3] ${compact ? 'min-h-0' : 'min-h-[180px]'} bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden`}>
         {mostrarImagen ? (
           <Image
             src={imagenSrc}
@@ -74,7 +75,7 @@ export default function HabitacionCard({ habitacion, precio, plantaId }: Props) 
 
         {/* Nombre habitacion */}
         <div className="absolute bottom-0 left-0 right-0 px-3 pb-3 pt-6 flex items-end justify-between">
-          <h3 className="text-white font-bold text-base sm:text-lg drop-shadow leading-tight mr-2 line-clamp-1">
+          <h3 className={`text-white font-bold ${compact ? 'text-xs' : 'text-base sm:text-lg'} drop-shadow leading-tight mr-2 line-clamp-1`}>
             {nombreMostrado}
           </h3>
           {!ocupado && habitacion.fotos.length > 1 && (
@@ -87,25 +88,25 @@ export default function HabitacionCard({ habitacion, precio, plantaId }: Props) 
       </div>
 
       {/* Info */}
-      <div className="bg-white p-4">
+      <div className={`bg-white ${compact ? 'p-2.5' : 'p-4'}`}>
         {ocupado ? (
-          <p className="text-gray-400 text-sm italic">No disponible temporalmente. Consulta los cuartos libres.</p>
+          <p className={`text-gray-400 ${compact ? 'text-[11px]' : 'text-sm'} italic line-clamp-2`}>No disponible temporalmente. Consulta los cuartos libres.</p>
         ) : habitacion.descripcion ? (
-          <p className="text-gray-500 text-sm line-clamp-2">{habitacion.descripcion}</p>
+          <p className={`text-gray-500 ${compact ? 'text-[11px]' : 'text-sm'} line-clamp-2`}>{habitacion.descripcion}</p>
         ) : (
-          <p className="text-gray-300 text-sm italic">
+          <p className={`text-gray-300 ${compact ? 'text-[11px]' : 'text-sm'} italic`}>
             {disponible ? 'Disponible para alquiler' : 'Consultar disponibilidad'}
           </p>
         )}
         {disponible && (
-          <div className="mt-2 text-xs font-semibold text-emerald-600 flex items-center gap-1">
+          <div className="mt-1.5 text-xs font-semibold text-emerald-600 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Lista para entrar
           </div>
         )}
-        {!disponible && !ocupado && habitacion.disponible_desde && (
-          <div className="mt-2 text-xs font-medium text-rose-500 flex items-center gap-1">
-            <CalendarClock size={11} />
+        {habitacion.disponible_desde && (
+          <div className="mt-1.5 text-[11px] text-gray-400 flex items-center gap-1">
+            <CalendarClock size={10} />
             Libre desde {formatFecha(habitacion.disponible_desde)}
           </div>
         )}

@@ -22,10 +22,8 @@ export default function AdminHabitacionCard({
   const [uploading, setUploading] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  // Titulo
-  const [editTitulo, setEditTitulo] = useState(false)
-  const [titulo, setTitulo] = useState(habitacion.titulo ?? '')
-  const [savingTitulo, setSavingTitulo] = useState(false)
+  // Titulo (solo para mostrar en header)
+  const [titulo] = useState(habitacion.titulo ?? '')
 
   // Descripción
   const [editDesc, setEditDesc] = useState(false)
@@ -70,13 +68,6 @@ export default function AdminHabitacionCard({
     await patch({ tiene_contrato: nuevo })
     setTieneContrato(nuevo)
     setSavingContrato(false)
-  }
-
-  async function guardarTitulo() {
-    setSavingTitulo(true)
-    await patch({ titulo: titulo.trim() || null })
-    setSavingTitulo(false); setEditTitulo(false)
-    startTransition(() => router.refresh())
   }
 
   async function guardarDesc() {
@@ -167,43 +158,6 @@ export default function AdminHabitacionCard({
             </>
           )}
         </button>
-
-        {/* Titulo personalizado */}
-        <div className="bg-violet-50 rounded-xl p-3">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-violet-700">
-              <BedDouble size={12} /> Título de la habitación
-            </div>
-            {!editTitulo ? (
-              <button onClick={() => setEditTitulo(true)} className="text-violet-400 hover:text-violet-700 p-1 rounded-lg hover:bg-violet-100 transition-colors">
-                <Pencil size={12} />
-              </button>
-            ) : (
-              <div className="flex gap-1">
-                <button onClick={guardarTitulo} disabled={savingTitulo} className="text-emerald-500 hover:text-emerald-700 p-1 rounded-lg hover:bg-emerald-50">
-                  {savingTitulo ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />}
-                </button>
-                <button onClick={() => { setEditTitulo(false); setTitulo(habitacion.titulo ?? '') }} className="text-rose-400 p-1 rounded-lg hover:bg-rose-50">
-                  <X size={12} />
-                </button>
-              </div>
-            )}
-          </div>
-          {editTitulo ? (
-            <input
-              type="text"
-              value={titulo}
-              onChange={e => setTitulo(e.target.value)}
-              placeholder={`Habitación ${habitacion.numero}`}
-              className="w-full border border-violet-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-violet-400 bg-white"
-              autoFocus
-            />
-          ) : (
-            <p className="text-sm font-bold text-violet-700">
-              {titulo || <span className="text-violet-300 italic font-normal">Habitación {habitacion.numero} (por defecto)</span>}
-            </p>
-          )}
-        </div>
 
         {/* Estado */}
         <div className="grid grid-cols-3 gap-1.5">
