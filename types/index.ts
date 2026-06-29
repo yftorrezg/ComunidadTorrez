@@ -29,6 +29,11 @@ export interface Habitacion {
   disponible_desde: string | null
   tiene_contrato: boolean
   fotos: Foto[]
+  // Datos del inquilino — requieren migración de BD (ver supabase-schema.sql)
+  inquilino_nombre?: string | null
+  inquilino_ci?: string | null
+  inquilino_contacto?: string | null
+  inquilino_fecha_ingreso?: string | null
 }
 
 export interface Planta {

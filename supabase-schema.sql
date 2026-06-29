@@ -121,6 +121,12 @@ WHERE planta_id = 'planta0' AND numero = 3;
 -- Internet ahora disponible en todas las plantas
 UPDATE plantas SET servicios = ARRAY['Agua','Luz','Internet'] WHERE id IN ('plantaBaja','planta0');
 
+-- Datos del inquilino por habitación (para control de ocupantes)
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_nombre TEXT;
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_ci TEXT;
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_contacto TEXT;
+ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_fecha_ingreso DATE;
+
 -- ============================================================
 -- SEED: DATOS INICIALES
 -- ============================================================

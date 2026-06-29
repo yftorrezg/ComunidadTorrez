@@ -4,71 +4,70 @@ import { ArrowLeft, Bath, ChefHat, Shirt, Sun, Home } from 'lucide-react'
 import { getPlanta } from '@/lib/db'
 import HabitacionesGrid from '@/components/HabitacionesGrid'
 import ImageGallery from '@/components/ImageGallery'
+import { sortHabitaciones } from '@/lib/utils/dates'
 import type { AreaTipo } from '@/types'
 
 export const revalidate = 60
 
 const AREA_ICONS: Record<AreaTipo, React.ReactNode> = {
-  bano: <Bath size={18} />,
-  cocina: <ChefHat size={18} />,
-  lavanderia: <Shirt size={18} />,
-  tendedero: <Shirt size={18} />,
-  terraza: <Sun size={18} />,
-  patio: <Home size={18} />,
-  vista: <Home size={18} />,
-  general: <Home size={18} />,
+  bano:       <Bath size={17} />,
+  cocina:     <ChefHat size={17} />,
+  lavanderia: <Shirt size={17} />,
+  tendedero:  <Shirt size={17} />,
+  terraza:    <Sun size={17} />,
+  patio:      <Home size={17} />,
+  vista:      <Home size={17} />,
+  general:    <Home size={17} />,
 }
 
 export default async function PlantaPage({ params }: { params: Promise<{ planta: string }> }) {
   const { planta: plantaId } = await params
   const planta = await getPlanta(plantaId).catch(() => null)
-
   if (!planta) notFound()
 
-  const disponibles = planta.habitaciones.filter((h) => h.estado === 'disponible').length
-
-  const ORDEN_ESTADO = { disponible: 0, reservado: 1, ocupado: 2 }
-  const habitacionesOrdenadas = [...planta.habitaciones].sort(
-    (a, b) => ORDEN_ESTADO[a.estado] - ORDEN_ESTADO[b.estado]
-  )
-  const areasVisibles = planta.areas.filter((a) => !a.oculta)
+  const disponibles = planta.habitaciones.filter(h => h.estado === 'disponible').length
+  const habitacionesOrdenadas = sortHabitaciones(planta.habitaciones)
+  const areasVisibles = planta.areas.filter(a => !a.oculta)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-600 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-gray-400 hover:text-violet-600 mb-5 transition-colors font-medium text-sm"
       >
-        <ArrowLeft size={18} /> Volver al inicio
+        <ArrowLeft size={16} /> Volver al inicio
       </Link>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">{planta.nombre}</h1>
-        <p className="text-gray-500 mt-1">
-          {disponibles} habitación{disponibles !== 1 ? 'es' : ''} disponible
-          {disponibles !== 1 ? 's' : ''} de {planta.habitaciones.length}
+      {/* Header planta */}
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800">{planta.nombre}</h1>
+        <p className="text-gray-500 text-sm mt-1">
+          {disponibles > 0
+            ? `${disponibles} habitación${disponibles !== 1 ? 'es' : ''} disponible${disponibles !== 1 ? 's' : ''} de ${planta.habitaciones.length}`
+            : `${planta.habitaciones.length} habitaciones — todas ocupadas`
+          }
         </p>
         <div className="flex flex-wrap gap-2 mt-3">
-          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
+          <span className="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
             {planta.precio_mensual} Bs./mes
           </span>
           {planta.precio_trimestral && (
-            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
-              {planta.precio_trimestral} Bs./trimestre
+            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs sm:text-sm">
+              {planta.precio_trimestral} Bs./trim.
             </span>
           )}
           {planta.precio_semestral && (
-            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
-              {planta.precio_semestral} Bs./semestre
+            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs sm:text-sm">
+              {planta.precio_semestral} Bs./sem.
             </span>
           )}
           {planta.precio_anual && (
-            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
+            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs sm:text-sm">
               {planta.precio_anual} Bs./año
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-500 mt-2">Incluye: {planta.servicios.join(', ')}</p>
+        <p className="text-xs sm:text-sm text-gray-400 mt-2">Incluye: {planta.servicios.join(', ')}</p>
       </div>
 
       {/* Habitaciones */}
@@ -78,15 +77,15 @@ export default async function PlantaPage({ params }: { params: Promise<{ planta:
         plantaId={planta.id}
       />
 
-      {/* Areas comunes */}
+      {/* Áreas comunes */}
       {areasVisibles.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold text-gray-700 mb-6">Áreas compartidas</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {areasVisibles.map((area) => (
+        <div className="mt-4">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-700 mb-4 sm:mb-6">Áreas compartidas</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {areasVisibles.map(area => (
               <div key={area.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-3 text-gray-700 font-medium">
-                  <span className="text-amber-500">{AREA_ICONS[area.tipo]}</span>
+                <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold text-sm">
+                  <span className="text-violet-500">{AREA_ICONS[area.tipo]}</span>
                   {area.nombre}
                 </div>
                 <ImageGallery fotos={area.fotos} nombre={area.nombre} />

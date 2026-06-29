@@ -3,7 +3,11 @@ import { requireAdminSession, buildUpdatePayload, apiError } from '@/lib/api-uti
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import type { Estado } from '@/types'
 
-const ALLOWED_FIELDS = ['estado', 'descripcion', 'precio', 'disponible_desde', 'tiene_contrato', 'titulo'] as const
+const ALLOWED_FIELDS = [
+  'estado', 'descripcion', 'precio', 'disponible_desde', 'tiene_contrato', 'titulo',
+  'inquilino_nombre', 'inquilino_ci', 'inquilino_contacto', 'inquilino_fecha_ingreso',
+] as const
+
 const ESTADOS_VALIDOS: Estado[] = ['disponible', 'ocupado', 'reservado']
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
