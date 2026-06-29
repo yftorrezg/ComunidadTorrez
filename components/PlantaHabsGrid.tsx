@@ -27,7 +27,7 @@ export default function PlantaHabsGrid({
           {dosCols ? <LayoutList size={15} /> : <LayoutGrid size={15} />}
         </button>
       </div>
-      <div className={`grid gap-3 ${dosCols ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
+      <div className={`grid gap-3 ${dosCols ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1 sm:grid-cols-2'}`}>
         {habitaciones.map(hab => (
           <HabitacionCard
             key={hab.id}

@@ -53,7 +53,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Plantas */}
-      <div className="space-y-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {plantas.map(planta => {
           const ordenadas = sortHabitaciones(planta.habitaciones)
           return (

@@ -1,6 +1,8 @@
 import { supabase } from './supabase'
 import type { Planta, Habitacion } from '@/types'
 
+const PLANTAS_ORDER = ['plantaBaja', 'planta0', 'planta1', 'planta2']
+
 export async function getPlantas(): Promise<Planta[]> {
   const { data: plantas, error } = await supabase
     .from('plantas')
@@ -19,17 +21,23 @@ export async function getPlantas(): Promise<Planta[]> {
 
   if (error) throw error
 
-  return plantas.map((p) => ({
-    ...p,
-    habitaciones: p.habitaciones.map((h: Habitacion & { fotos_habitacion: unknown[] }) => ({
-      ...h,
-      fotos: h.fotos_habitacion,
-    })),
-    areas: p.areas_comunes.map((a: { fotos_area: unknown[] } & object) => ({
-      ...a,
-      fotos: a.fotos_area,
-    })),
-  }))
+  return plantas
+    .map((p) => ({
+      ...p,
+      habitaciones: p.habitaciones.map((h: Habitacion & { fotos_habitacion: unknown[] }) => ({
+        ...h,
+        fotos: h.fotos_habitacion,
+      })),
+      areas: p.areas_comunes.map((a: { fotos_area: unknown[] } & object) => ({
+        ...a,
+        fotos: a.fotos_area,
+      })),
+    }))
+    .sort((a, b) => {
+      const ai = PLANTAS_ORDER.indexOf(a.id)
+      const bi = PLANTAS_ORDER.indexOf(b.id)
+      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi)
+    })
 }
 
 export async function getPlanta(id: string): Promise<Planta | null> {
