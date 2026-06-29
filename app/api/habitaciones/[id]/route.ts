@@ -1,33 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSession } from '@/lib/auth'
+import { requireAdminSession, buildUpdatePayload, apiError } from '@/lib/api-utils'
 import { supabaseAdmin } from '@/lib/supabase-admin'
+import type { Estado } from '@/types'
+
+const ALLOWED_FIELDS = ['estado', 'descripcion', 'precio', 'disponible_desde', 'tiene_contrato', 'titulo'] as const
+const ESTADOS_VALIDOS: Estado[] = ['disponible', 'ocupado', 'reservado']
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getAdminSession()
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const unauthorized = await requireAdminSession()
+  if (unauthorized) return unauthorized
 
   const { id } = await params
   const body = await req.json()
 
-  const allowed = ['estado', 'descripcion', 'precio', 'disponible_desde', 'tiene_contrato', 'titulo']
-  const updates: Record<string, unknown> = {}
-  for (const key of allowed) {
-    if (key in body) updates[key] = body[key]
-  }
+  const updates = buildUpdatePayload(body, ALLOWED_FIELDS)
+  if (!updates) return apiError('Nada que actualizar')
 
-  if (Object.keys(updates).length === 0) {
-    return NextResponse.json({ error: 'Nada que actualizar' }, { status: 400 })
-  }
-
-  if (updates.estado) {
-    const validos = ['disponible', 'ocupado', 'reservado']
-    if (!validos.includes(updates.estado as string)) {
-      return NextResponse.json({ error: 'Estado invalido' }, { status: 400 })
-    }
+  if (updates.estado !== undefined && !ESTADOS_VALIDOS.includes(updates.estado as Estado)) {
+    return apiError('Estado inválido')
   }
 
   const { error } = await supabaseAdmin.from('habitaciones').update(updates).eq('id', parseInt(id))
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) return apiError(error.message, 500)
 
   return NextResponse.json({ ok: true })
 }

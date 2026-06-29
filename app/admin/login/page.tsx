@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { Lock, Eye, EyeOff } from 'lucide-react'
+import Link from 'next/link'
+import { Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react'
 
 export default function LoginPage() {
   const [password, setPassword] = useState('')
@@ -79,6 +80,16 @@ export default function LoginPage() {
               {loading ? 'Ingresando...' : 'Ingresar'}
             </button>
           </form>
+        </div>
+
+        <div className="text-center mt-5">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm transition-colors font-medium"
+          >
+            <ArrowLeft size={15} />
+            Volver al inicio
+          </Link>
         </div>
       </div>
     </div>

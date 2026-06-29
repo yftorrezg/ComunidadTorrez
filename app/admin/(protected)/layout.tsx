@@ -35,7 +35,6 @@ export default async function AdminProtectedLayout({ children }: { children: Rea
             </Link>
             <Link
               href="/"
-              target="_blank"
               className="flex items-center gap-1.5 text-xs sm:text-sm text-gray-500 hover:text-gray-700 px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium"
             >
               <Globe size={14} />

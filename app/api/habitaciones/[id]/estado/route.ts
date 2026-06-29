@@ -1,25 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSession } from '@/lib/auth'
+import { requireAdminSession, apiError } from '@/lib/api-utils'
 import { supabaseAdmin } from '@/lib/supabase-admin'
+import type { Estado } from '@/types'
+
+const ESTADOS_VALIDOS: Estado[] = ['disponible', 'ocupado', 'reservado']
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getAdminSession()
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const unauthorized = await requireAdminSession()
+  if (unauthorized) return unauthorized
 
   const { id } = await params
   const { estado } = await req.json()
 
-  const estadosValidos = ['disponible', 'ocupado', 'reservado']
-  if (!estadosValidos.includes(estado)) {
-    return NextResponse.json({ error: 'Estado invalido' }, { status: 400 })
-  }
+  if (!ESTADOS_VALIDOS.includes(estado)) return apiError('Estado inválido')
 
   const { error } = await supabaseAdmin
     .from('habitaciones')
     .update({ estado })
     .eq('id', parseInt(id))
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) return apiError(error.message, 500)
 
   return NextResponse.json({ ok: true })
 }

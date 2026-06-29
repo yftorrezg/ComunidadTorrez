@@ -1,26 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSession } from '@/lib/auth'
+import { requireAdminSession, apiError } from '@/lib/api-utils'
 import { supabaseAdmin } from '@/lib/supabase-admin'
+import { processImage } from '@/lib/utils/image'
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getAdminSession()
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const unauthorized = await requireAdminSession()
+  if (unauthorized) return unauthorized
 
   const { id } = await params
   const areaId = parseInt(id)
 
   const formData = await req.formData()
   const file = formData.get('file') as File | null
-  if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 })
+  if (!file) return apiError('No se recibió ningún archivo')
 
-  const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
-  const storagePath = `areas/${areaId}/${Date.now()}.${ext}`
+  let processed: Awaited<ReturnType<typeof processImage>>
+  try {
+    processed = await processImage(file)
+  } catch (err) {
+    return apiError(err instanceof Error ? err.message : 'Error procesando imagen')
+  }
+
+  const storagePath = `areas/${areaId}/${Date.now()}.${processed.ext}`
 
   const { error: uploadError } = await supabaseAdmin.storage
     .from('fotos')
-    .upload(storagePath, file, { contentType: file.type })
+    .upload(storagePath, processed.buffer, { contentType: processed.contentType })
 
-  if (uploadError) return NextResponse.json({ error: uploadError.message }, { status: 500 })
+  if (uploadError) return apiError(uploadError.message, 500)
 
   const { data: urlData } = supabaseAdmin.storage.from('fotos').getPublicUrl(storagePath)
 
@@ -30,7 +37,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     .select()
     .single()
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) return apiError(dbError.message, 500)
 
   return NextResponse.json({ foto: fotoData })
 }

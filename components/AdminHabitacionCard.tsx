@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { BedDouble, Trash2, Upload, Loader2, Pencil, Check, X, CalendarClock, Tag, FileText } from 'lucide-react'
 import StatusBadge from './StatusBadge'
+import { formatFecha } from '@/lib/utils/dates'
 import type { Habitacion, Estado } from '@/types'
 
 export default function AdminHabitacionCard({
@@ -119,7 +120,7 @@ export default function AdminHabitacionCard({
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {isPending && <Loader2 size={13} className="text-violet-400 animate-spin" />}
-          <StatusBadge estado={estado} />
+          <StatusBadge estado={estado} disponibleDesde={fecha || null} />
         </div>
       </div>
 
@@ -325,8 +326,3 @@ export default function AdminHabitacionCard({
   )
 }
 
-function formatFecha(iso: string) {
-  const [y, m, d] = iso.split('-')
-  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
-  return `${d} de ${meses[parseInt(m) - 1]} de ${y}`
-}

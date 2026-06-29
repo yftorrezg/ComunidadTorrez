@@ -5,14 +5,9 @@ import { getHabitacion, getPlanta } from '@/lib/db'
 import ImageGallery from '@/components/ImageGallery'
 import StatusBadge from '@/components/StatusBadge'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import { formatFecha, isAvailableNow } from '@/lib/utils/dates'
 
 export const revalidate = 60
-
-function formatFecha(iso: string) {
-  const [y, m, d] = iso.split('-')
-  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
-  return `${d} de ${meses[parseInt(m) - 1]} de ${y}`
-}
 
 export default async function HabitacionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -34,7 +29,13 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
 
   const disponible = habitacion.estado === 'disponible'
   const reservado = habitacion.estado === 'reservado'
+  const ahora = isAvailableNow(habitacion.estado, habitacion.disponible_desde)
   const precioFinal = habitacion.precio ?? planta?.precio_mensual
+
+  // Mostrar tarjeta de fecha cuando la habitación no está disponible ahora mismo
+  const mostrarFecha =
+    habitacion.disponible_desde &&
+    !isAvailableNow(habitacion.estado, habitacion.disponible_desde)
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -60,7 +61,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
               </div>
               {planta && <p className="text-gray-400 text-sm">{planta.nombre}</p>}
             </div>
-            <StatusBadge estado={habitacion.estado} size="lg" />
+            <StatusBadge estado={habitacion.estado} disponibleDesde={habitacion.disponible_desde} size="lg" />
           </div>
 
           {/* Galeria */}
@@ -109,7 +110,7 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
               </h1>
             </div>
             {planta && <p className="text-gray-400 text-sm mb-3">{planta.nombre}</p>}
-            <StatusBadge estado={habitacion.estado} size="lg" />
+            <StatusBadge estado={habitacion.estado} disponibleDesde={habitacion.disponible_desde} size="lg" />
           </div>
 
           {/* Precio */}
@@ -157,13 +158,17 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
             </div>
           )}
 
-          {/* Disponible desde */}
-          {!disponible && habitacion.disponible_desde && (
-            <div className="bg-rose-50 border border-rose-100 rounded-3xl p-4 flex items-center gap-3">
-              <CalendarClock size={18} className="text-rose-400 flex-shrink-0" />
+          {/* Disponible desde — solo cuando no está disponible ahora */}
+          {mostrarFecha && (
+            <div className={`border rounded-3xl p-4 flex items-center gap-3 ${
+              disponible ? 'bg-sky-50 border-sky-100' : 'bg-rose-50 border-rose-100'
+            }`}>
+              <CalendarClock size={18} className={`flex-shrink-0 ${disponible ? 'text-sky-400' : 'text-rose-400'}`} />
               <div>
-                <p className="text-rose-700 font-semibold text-sm">Libre desde</p>
-                <p className="text-rose-500 text-sm">{formatFecha(habitacion.disponible_desde)}</p>
+                <p className={`font-semibold text-sm ${disponible ? 'text-sky-700' : 'text-rose-700'}`}>Libre desde</p>
+                <p className={`text-sm ${disponible ? 'text-sky-500' : 'text-rose-500'}`}>
+                  {formatFecha(habitacion.disponible_desde!)}
+                </p>
               </div>
             </div>
           )}
@@ -172,7 +177,11 @@ export default async function HabitacionPage({ params }: { params: Promise<{ id:
           {(disponible || reservado) && (
             <div className="bg-white rounded-3xl p-6 shadow-sm text-center">
               <p className="font-semibold text-gray-700 mb-1 text-sm">
-                {disponible ? 'Lista para entrar' : 'Consultar disponibilidad'}
+                {disponible
+                  ? ahora
+                    ? 'Lista para entrar'
+                    : 'Disponible próximamente'
+                  : 'Consultar disponibilidad'}
               </p>
               <p className="text-gray-400 text-xs mb-4">Respuesta inmediata por WhatsApp</p>
               <WhatsAppButton mensaje={mensajeWA} className="w-full justify-center" />
