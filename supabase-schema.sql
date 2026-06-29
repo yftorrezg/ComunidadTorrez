@@ -127,6 +127,10 @@ ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_ci TEXT;
 ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_contacto TEXT;
 ALTER TABLE habitaciones ADD COLUMN IF NOT EXISTS inquilino_fecha_ingreso DATE;
 
+-- Corregir nombres de áreas comunes: Bano → Baño, Lavanderia → Lavandería
+UPDATE areas_comunes SET nombre = REPLACE(nombre, 'Bano', 'Baño')       WHERE nombre LIKE 'Bano%';
+UPDATE areas_comunes SET nombre = REPLACE(nombre, 'Lavanderia', 'Lavandería') WHERE nombre LIKE 'Lavanderia%';
+
 -- ============================================================
 -- SEED: DATOS INICIALES
 -- ============================================================
@@ -171,34 +175,34 @@ INSERT INTO habitaciones (planta_id, numero, estado, orden) VALUES
 
 -- Areas comunes Planta Baja
 INSERT INTO areas_comunes (planta_id, tipo, nombre, orden) VALUES
-  ('plantaBaja', 'bano',       'Bano 1',        1),
-  ('plantaBaja', 'bano',       'Bano 2',        2),
-  ('plantaBaja', 'lavanderia', 'Lavanderia',    3),
+  ('plantaBaja', 'bano',       'Baño 1',        1),
+  ('plantaBaja', 'bano',       'Baño 2',        2),
+  ('plantaBaja', 'lavanderia', 'Lavandería',    3),
   ('plantaBaja', 'tendedero',  'Tendederos',    4),
   ('plantaBaja', 'patio',      'Patio',         5),
   ('plantaBaja', 'vista',      'Exterior',      6);
 
 -- Areas comunes Planta 0
 INSERT INTO areas_comunes (planta_id, tipo, nombre, orden) VALUES
-  ('planta0', 'bano',       'Bano 1',     1),
-  ('planta0', 'bano',       'Bano 2',     2),
-  ('planta0', 'lavanderia', 'Lavanderia', 3),
-  ('planta0', 'tendedero',  'Tendederos', 4);
+  ('planta0', 'bano',       'Baño 1',      1),
+  ('planta0', 'bano',       'Baño 2',      2),
+  ('planta0', 'lavanderia', 'Lavandería',  3),
+  ('planta0', 'tendedero',  'Tendederos',  4);
 
 -- Areas comunes Planta 1
 INSERT INTO areas_comunes (planta_id, tipo, nombre, orden) VALUES
-  ('planta1', 'cocina',     'Cocina',     1),
-  ('planta1', 'bano',       'Bano 1',     2),
-  ('planta1', 'bano',       'Bano 2',     3),
-  ('planta1', 'terraza',    'Terraza',    4),
-  ('planta1', 'lavanderia', 'Lavanderia', 5),
-  ('planta1', 'tendedero',  'Tendederos', 6);
+  ('planta1', 'cocina',     'Cocina',      1),
+  ('planta1', 'bano',       'Baño 1',      2),
+  ('planta1', 'bano',       'Baño 2',      3),
+  ('planta1', 'terraza',    'Terraza',     4),
+  ('planta1', 'lavanderia', 'Lavandería',  5),
+  ('planta1', 'tendedero',  'Tendederos',  6);
 
 -- Areas comunes Planta 2
 INSERT INTO areas_comunes (planta_id, tipo, nombre, orden) VALUES
-  ('planta2', 'cocina',     'Cocina',     1),
-  ('planta2', 'bano',       'Bano 1',     2),
-  ('planta2', 'bano',       'Bano 2',     3),
-  ('planta2', 'terraza',    'Terraza',    4),
-  ('planta2', 'lavanderia', 'Lavanderia', 5),
-  ('planta2', 'tendedero',  'Tendederos', 6);
+  ('planta2', 'cocina',     'Cocina',      1),
+  ('planta2', 'bano',       'Baño 1',      2),
+  ('planta2', 'bano',       'Baño 2',      3),
+  ('planta2', 'terraza',    'Terraza',     4),
+  ('planta2', 'lavanderia', 'Lavandería',  5),
+  ('planta2', 'tendedero',  'Tendederos',  6);
